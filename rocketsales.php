@@ -3,7 +3,7 @@
 /**
  * Подписываемся на событие "Добавление заказа"
  */
-AddEventHandler('sale', 'OnOrderAdd', 'sendOrderToAmo');
+AddEventHandler('sale', 'OnOrderAdd', 'processOrder');
 
 /**
  * Хэш хука для заказов
@@ -21,7 +21,7 @@ const FORMS_HOOK = ORDERS_HOOK;
  * @param $ID - ID заказа
  * @param $arFields - массив полей заказа
  */
-function sendOrderToAmo($ID, $arFields)
+function processOrder($ID, $arFields)
 {
 
     $data = [
@@ -64,7 +64,7 @@ function sendOrderToAmo($ID, $arFields)
      */
     $data["raw"] = $arFields;
 
-    sendToRocket(ORDERS_HOOK, $data);
+    send(ORDERS_HOOK, $data);
 
 }
 
@@ -73,7 +73,7 @@ function sendOrderToAmo($ID, $arFields)
  * @param $hash - хэш хука
  * @param $data - данные для отправки
  */
-function sendToRocket($hash, $data)
+function send($hash, $data)
 {
 
     $url = 'https://b2b.rocketcrm.bz/api/channels/site/form?hash=' . $hash;
