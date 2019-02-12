@@ -1,9 +1,14 @@
 <?php
 
 /**
- * Подписываемся на событие "Добавление заказа"
+ * Подписываемся на событие нового заказа
  */
 AddEventHandler('sale', 'OnOrderAdd', 'processOrder');
+
+/**
+ * Подписываемся на событие отправки формы
+ */
+AddEventHandler('form', 'onBeforeResultAdd', 'processForm');
 
 /**
  * Хэш хука для заказов
@@ -64,7 +69,27 @@ function processOrder($ID, $arFields)
      */
     $data["raw"] = $arFields;
 
+    /**
+     * Отправка
+     */
     send(ORDERS_HOOK, $data);
+
+}
+
+/**
+ * Обработка отправки форм
+ */
+function processForm($WEB_FORM_ID, $arFields, $arrVALUES)
+{
+    /**
+     * В raw будут все данные, что отдаёт Bitrix
+     */
+    $data["raw"] = $arrVALUES;
+
+    /**
+     * Отправка
+     */
+    send(FORMS_HOOK, $data);
 
 }
 
