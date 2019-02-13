@@ -1,4 +1,4 @@
-<?php
+<?
 
 /**
  * Подписываемся на событие нового заказа
@@ -13,7 +13,7 @@ AddEventHandler('form', 'onBeforeResultAdd', 'processForm');
 /**
  * Хэш хука для заказов
  */
-const ORDERS_HOOK = 'bc2f7ff007';
+const ORDERS_HOOK = 'xxxxxxxxxx';
 
 /**
  * Хэш хука для форм
@@ -84,7 +84,7 @@ function processForm($WEB_FORM_ID, $arFields, $arrVALUES)
     /**
      * В raw будут все данные, что отдаёт Bitrix
      */
-    $data["raw"] = $arrVALUES;
+    $data = $arrVALUES;
 
     /**
      * Отправка
@@ -105,12 +105,14 @@ function send($hash, $data)
     $ch = curl_init($url);
 
     $encodedData = json_encode($data);
+    
     curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $encodedData);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
 
-    $result = curl_exec($ch);
-
+    curl_exec($ch);
+    
     curl_close($ch);
 
 }
@@ -123,3 +125,5 @@ function formatNumber($value, $decimals = 2, $dec_point = '.', $thousands_sep = 
 {
     return number_format($value, $decimals, $dec_point, $thousands_sep);
 }
+
+?>
