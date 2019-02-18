@@ -42,6 +42,19 @@ function processOrder($ID, $arFields)
         currency => $arFields["CURRENCY"],
         basket => ""
     ];
+    
+    /**
+     * Дополняем данными о доставке
+     */
+    $delivery = CSaleDelivery::GetByID($arFields["DELIVERY_ID"]);
+
+    $data["delivery"] = [
+        id => $delivery["ID"],
+        name => $delivery["NAME"],
+        description => $delivery["DESCRIPTION"],
+        price => formatNumber($arFields["PRICE_DELIVERY"]),
+        currency => $delivery["CURRENCY"]
+    ];
 
     /**
      * Перебор всех позиций заказа
@@ -68,6 +81,7 @@ function processOrder($ID, $arFields)
      * при ненадобности это можно закомментировать
      */
     $data["raw"] = $arFields;
+    $data["raw"]["delivery"] = $delivery;
 
     /**
      * Отправка
