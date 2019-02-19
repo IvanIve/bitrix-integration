@@ -55,6 +55,17 @@ function processOrder($ID, $arFields)
         price => formatNumber($arFields["PRICE_DELIVERY"]),
         currency => $delivery["CURRENCY"]
     ];
+    
+    /**
+     * Дополняем данными о платёжной системе
+     */
+    $paySystem = CSalePaySystem::GetByID($arFields["PAY_SYSTEM_ID"]);
+
+    $data["pay_system"] = [
+        id => $paySystem["ID"],
+        name => $paySystem["NAME"],
+        description => $paySystem["DESCRIPTION"],
+    ];
 
     /**
      * Перебор всех позиций заказа
@@ -82,6 +93,7 @@ function processOrder($ID, $arFields)
      */
     $data["raw"] = $arFields;
     $data["raw"]["delivery"] = $delivery;
+    $data["raw"]["pay_system"] = $paySystem;
 
     /**
      * Отправка
